@@ -2,6 +2,7 @@ import React from "react";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Accordion from 'react-bootstrap/Accordion';
+import ReservationItem from "./ReservationItem";
 
 class ReservationList extends React.Component{
     constructor(props){
@@ -76,14 +77,128 @@ class ReservationList extends React.Component{
         this.setState({ reservations: listaAux, showModal: false, id: 0, vaga: '', dateInit: '', dateEnd: '' });
     }
 
+    // função que fecha o modal
+    handleClose(save) {
+        // se o utilizador clicar em guardar
+        if (save) {
+          // cria uma lista auxiliar
+          let listaAux = this.state.reservations;
+          // altera os valores da reserva
+            listaAux[this.state.id].vaga = this.state.vaga;
+            listaAux[this.state.id].dateInit = this.state.dateInit;
+            listaAux[this.state.id].dateEnd = this.state.dateEnd;
+          // atualiza o estado
+          this.setState({ showModal: false, reservations: listaAux });
+
+          // se o utilizador clicar em cancelar
+        } else {
+          this.setState({ showModal: false });
+        }
+      }
+
+    // função que muda o estado da reserva após a data de fim
+    handleStatus(id){
+        // cria uma lista auxiliar
+        let listaAux = this.state.reservations;
+        // muda o estado da reserva
+        listaAux[id].status === 0 ? listaAux[id].status = 1 : listaAux[id].status = 0;
+        
+        // atualiza o estado
+        this.setState({ reservations: listaAux });
+    }
+
     render(){
-        return(
+        let finishedReservations = this.state.reservations.map((reservation, id) => {
+            if (reservation.status === 1) {
+              return (
+                <ReservationItem
+                  reservation={reservation}
+                  handleDeleteItem={() => this.handleDeleteReservation(id)}
+                  handleEditItem={() => this.handleEditReservation(id)}
+                  handleStatusChange={() => this.handleStatus(id)}
+                />
+              );
+            }
+          });
+        
+          let unfinishedReservations = this.state.reservations.map((reservation, id) => {
+            if (reservation.status === 0) {
+              return (
+                <ReservationItem
+                  reservation={reservation}
+                  handleDeleteItem={() => this.handleDeleteReservation(id)}
+                  handleEditItem={() => this.handleEditReservation(id)}
+                  handleStatusChange={() => this.handleStatus(id)}
+                />
+              );
+            }
+          });
+
+        return (
             <div>
-                <div className="row">
-                    <div className="col-12">
-                        <h1>Reservas</h1>
+                <div class="mb-3 row">
+                    <div class="col-md-6 col-xs-12">
+                        <label for="vaga" class="form-label">Insira a vaga:</label>
+                        <input type="text" value={this.state.vaga} onChange={(evt) => this.handleChangeVaga(evt)} />
+                        <label for="dateInit" class="form-label">Data de inicio:</label>
+                        <input type="date" value={this.state.dateInit} onChange={(evt) => this.handleChangeDateInit(evt)} />
+                        <label for="dateEnd" class="form-label"> Data de fim:</label>
+                        <input type="date" value={this.state.dateEnd} onChange={(evt) => this.handleChangeDateEnd(evt)} />
+                        <button type="submit" class="btn btn-primary" onClick={() => this.handleAddReservation()}>Adicionar</button>
                     </div>
                 </div>
+                <div class="mb-3 row">
+                    <div class="col-md-6 col-xs-12">
+                        <Accordion defaultActiveKey={['0', '1']} alwaysOpen>
+                            <Accordion.Item eventKey="0">
+                                <Accordion.Header>Reservas Abertas</Accordion.Header>
+                                <Accordion.Body>
+                                    <ul class="list-group">
+                                        {unfinishedReservations}
+                                    </ul>
+                                </Accordion.Body>
+                            </Accordion.Item>
+                            <Accordion.Item eventKey="1">
+                                <Accordion.Header>Reservas Fechadas</Accordion.Header>
+                                <Accordion.Body>
+                                    <ul class="list-group">
+                                        {finishedReservations}
+                                    </ul>
+                                </Accordion.Body>
+                            </Accordion.Item>
+                        </Accordion>
+                    </div>
+                </div>
+
+                <Modal show={this.state.showModal} onHide={() => this.handleClose(false)}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Editar Reserva</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <div class="mb-3 row">
+                            <div class="col-md-6 col-xs-12">
+                                <label for="vaga" class="form-label">Insira a vaga</label>
+                                <input type="text" value={this.state.vaga} onChange={(evt) => this.handleChangeVaga(evt)} />
+                            </div>
+                            <div class="col-md-6 col-xs-12">
+                                <label for="dateInit" class="form-label">Insira a data de inicio</label>
+                                <input type="date" value={this.state.dateInit} onChange={(evt) => this.handleChangeDateInit(evt)} />
+                            </div>
+                            <div class="col-md-6 col-xs-12">
+                                <label for="dateEnd" class="form-label">Insira a data de fim</label>
+                                <input type="date" value={this.state.dateEnd} onChange={(evt) => this.handleChangeDateEnd(evt)} />
+                            </div>
+                        </div>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={() => this.handleClose(false)}>
+                            Sair
+                        </Button>
+                        <Button variant="primary" onClick={() => this.handleClose(true)}>
+                            Guardar
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
             </div>
         );
     }
