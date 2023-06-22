@@ -34,6 +34,21 @@ class ReservationList extends React.Component{
 
     // função que adiciona uma reserva
     handleAddReservation(){
+        // previne que os campos estejam vazios e que a vaga não seja apenas espaços
+        if(this.state.vaga.trim() === '' || this.state.dateInit === '' || this.state.dateEnd === ''){
+            alert('Preencha todos os campos!');
+            return;
+        }
+        // Previne que a data de início seja superior à data de fim
+        else if(this.state.dateInit > this.state.dateEnd){
+            alert('A data de início não pode ser superior à data de fim!');
+            return;
+        }
+        // Previne inserir uma vaga que já existe na lista de reservas abertas
+        else if(this.state.reservations.some(reserva => reserva.vaga === this.state.vaga && reserva.status === 0)){
+            alert('A vaga já existe!');
+            return;
+        }
         // guarda a reserva numa constante
         let reserva = {vaga: this.state.vaga, dateInit: this.state.dateInit, dateEnd: this.state.dateEnd, status: 0 };
         // cria uma lista auxiliar
@@ -102,9 +117,48 @@ class ReservationList extends React.Component{
         let listaAux = this.state.reservations;
         // muda o estado da reserva
         listaAux[id].status === 0 ? listaAux[id].status = 1 : listaAux[id].status = 0;
-        
         // atualiza o estado
         this.setState({ reservations: listaAux });
+    }
+
+    // função para verificar se algum item da lista já passou a data de fim e mudar o estado para 1
+    componentDidMount(){
+        // cria uma lista auxiliar
+        let listaAux = this.state.reservations;
+        // percorre a lista
+        listaAux.map((reservation, id) => {
+            // se a data de fim for inferior à data atual
+            if(reservation.dateEnd < new Date().toISOString().slice(0, 10)){
+                // muda o estado da reserva
+                reservation.status = 1;
+            }else{
+                // muda o estado da reserva
+                reservation.status = 0;
+            }
+        });
+        // atualiza o estado
+        this.setState({ reservations: listaAux });
+    }
+
+    // executar a verificação a cada 10 segundos
+    componentWillMount(){
+        setInterval(() => {
+            // cria uma lista auxiliar
+            let listaAux = this.state.reservations;
+            // percorre a lista
+            listaAux.map((reservation, id) => {
+                // se a data de fim for inferior à data atual
+                if(reservation.dateEnd < new Date().toISOString().slice(0, 10)){
+                    // muda o estado da reserva
+                    reservation.status = 1;
+                }else{
+                    // muda o estado da reserva
+                    reservation.status = 0;
+                }
+            });
+            // atualiza o estado
+            this.setState({ reservations: listaAux });
+        }, 10000);
     }
 
     render(){

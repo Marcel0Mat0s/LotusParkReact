@@ -1,7 +1,10 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import Clock from 'react-live-clock';
 
+//Constante que vai buscar a data atual
 const dateBuilder = (d) => {
+
+    // Array com os meses
     let months = [
         "janeiro",
         "fevereiro",
@@ -15,7 +18,9 @@ const dateBuilder = (d) => {
         "outubro",
         "novembro",
         "dezembro",
-        ];
+    ];
+
+    // Array com os dias da semana
     let days = [
         "Domingo",
         "Segunda-Feira",
@@ -24,8 +29,9 @@ const dateBuilder = (d) => {
         "Quinta-Feira",
         "Sexta-Feira",
         "Sábado",
-        ];
+    ];
 
+    // Variáveis que vão buscar o dia, mês e ano atual
     let day = days[d.getDay()];
     let date = d.getDate();
     let month = months[d.getMonth()];
@@ -33,55 +39,69 @@ const dateBuilder = (d) => {
     return `${day}, ${date} ${month} ${year}`
 }
 
-class Weather extends Component{
-    
+class Weather extends Component {
+
+    // Estado inicial do componente
     state = {
-        country: undefined,
-        city: undefined,
-        temp: undefined,
-        humidity: undefined,
-        description: undefined
+        country: "PT",
+        city: "Tomar",
+        temp: "0",
+        humidity: "0",
+        description: "Desconhecido"
     };
-    
+
+    // Função que vai buscar a localização do utilizador e a meteorologia
     componentDidMount() {
+        // Se o utilizador permitir a localização
         if (navigator.geolocation) {
-          this.getPosition()
-            //If user allow location service then will fetch data & send it to get-weather function.
-            .then((position) => {
-              this.getWeather(position.coords.latitude, position.coords.longitude);
-            })
-            .catch((err) => {
-              //If user denied location service then standard location weather will le shown on basis of latitude & latitude.
-              this.getWeather(39.600562, -8.390449);
-              alert(
-                "Desabilitou a localização, por favor habilite-a para ver a meteorologia da sua localização atual. Por defeito, será mostrada a meteorologia de Tomar."
-              );
-            });
+            this.getPosition()
+                // Se a localização for obtida com sucesso
+                .then((position) => {
+                    // Guarda a latitude e longitude do utilizador
+                    this.getWeather(position.coords.latitude, position.coords.longitude);
+                })
+                // Se a localização não for obtida com sucesso
+                .catch((err) => {
+                    // Mostra a meteorologia de Tomar por defeito
+                    this.getWeather(39.600562, -8.390449);
+                    // Alerta o utilizador
+                    alert(
+                        "Desabilitou a localização, por favor habilite-a para ver a meteorologia da sua localização atual. Por defeito, será mostrada a meteorologia de Tomar."
+                    );
+                });
+            // Quando o browser não suporta a geolocalização
         } else {
-          alert("Geolocalização não suportada pelo browser.");
+            alert("Geolocalização não suportada pelo browser.");
         }
-    
+
+        // Atualiza a meteorologia de 10 em 10 minutos (600000 milisegundos)
         this.timerID = setInterval(
-          () => this.getWeather(this.state.lat, this.state.lon),
-          600000
+            () => this.getWeather(this.state.lat, this.state.lon),
+            600000
         );
-      }
-    
-      componentWillUnmount() {
+    }
+
+    componentWillUnmount() {
         clearInterval(this.timerID);
-      }
+    }
 
-      getPosition = (options) => {
+    // Função que vai buscar a localização do utilizador
+    getPosition = (options) => {
         return new Promise(function (resolve, reject) {
-          navigator.geolocation.getCurrentPosition(resolve, reject, options);
+            navigator.geolocation.getCurrentPosition(resolve, reject, options);
         });
-      };
+    };
 
 
+    // Função que vai buscar a meteorologia à API do OpenWeatherMap
     getWeather = async (lat, lon) => {
-        const api_call = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=73a64817863db278534b045b535fdc31&units=metric&lang=pt`);
+        // Chamada à API
+        const api_call = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=CANNOT SEE KEY&units=metric&lang=pt`);
+        // Guarda a resposta da API em formato JSON
         const data = await api_call.json();
-        console.log(data);
+        // Se a resposta da API não contiver informação mantém a meteorologia anterior
+        if (data.name === undefined) return;
+        // Guarda os dados da resposta da API no state do componente
         this.setState({
             city: data.name,
             country: data.sys.country,
@@ -89,34 +109,32 @@ class Weather extends Component{
             humidity: data.main.humidity,
             description: data.weather[0].description
         });
-        
     }
 
-    render(){
-
-        return(
+    render() {
+        return (
             <React.Fragment>
                 <div className="city">
-            <div className="title">
-              <h2>{this.state.city} - {this.state.country} </h2>
-              <h3>{this.state.description}</h3>
-            </div>
-            <div className="date-time">
-              <div className="dmy">
-                <div id="txt"></div>
-                <div className="current-time">
-                  <Clock format="HH:mm:ss" interval={1000} ticking={true} />
+                    <div className="title">
+                        <h2>{this.state.city} - {this.state.country} </h2>
+                        <h3>{this.state.description}</h3>
+                    </div>
+                    <div className="date-time">
+                        <div className="dmy">
+                            <div id="txt"></div>
+                            <div className="current-time">
+                                <Clock format="HH:mm:ss" interval={1000} ticking={true} />
+                            </div>
+                            <div className="current-date">{dateBuilder(new Date())}</div>
+                        </div>
+                        <div className="temperature">
+                            <p>
+                                {this.state.temp}°<span>C</span> <br />
+                                {this.state.humidity}%<span> Humidade</span>
+                            </p>
+                        </div>
+                    </div>
                 </div>
-                <div className="current-date">{dateBuilder(new Date())}</div>
-              </div>
-              <div className="temperature">
-                <p>
-                  {this.state.temp}°<span>C</span> <br />
-                {this.state.humidity}%<span>Humidade</span>
-                </p>
-              </div>
-            </div>
-          </div>
             </React.Fragment>
         );
     }
