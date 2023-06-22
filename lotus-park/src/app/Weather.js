@@ -96,7 +96,7 @@ class Weather extends Component {
     // Função que vai buscar a meteorologia à API do OpenWeatherMap
     getWeather = async (lat, lon) => {
         // Chamada à API
-        const api_call = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=9ec6b8792977153a9db9dc83d2134ec5&units=metric&lang=pt`);
+        const api_call = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=ESQUECI_ME_DE_APAGAR_A_CHAVE&units=metric&lang=pt`);
         // Guarda a resposta da API em formato JSON
         const data = await api_call.json();
         // Se a resposta da API não contiver informação mantém a meteorologia anterior
