@@ -46,7 +46,7 @@ class ReservationList extends React.Component{
         }
         // Previne inserir uma vaga que já existe na lista de reservas abertas
         else if(this.state.reservations.some(reserva => reserva.vaga === this.state.vaga && reserva.status === 0)){
-            alert('A vaga já existe!');
+            alert('A vaga já está ocupada por uma reserva aberta!');
             return;
         }
         // guarda a reserva numa constante
@@ -96,6 +96,16 @@ class ReservationList extends React.Component{
     handleClose(save) {
         // se o utilizador clicar em guardar
         if (save) {
+            //verifica se algum campo está vazio
+            if(this.state.vaga.trim() === '' || this.state.dateInit === '' || this.state.dateEnd === ''){
+                alert('Preencha todos os campos!');
+                return;
+            }
+            // verifica se a data de início é superior à data de fim
+            if(this.state.dateInit > this.state.dateEnd){
+                alert('A data de início não pode ser superior à data de fim!');
+                return;
+            }
           // cria uma lista auxiliar
           let listaAux = this.state.reservations;
           // altera os valores da reserva
@@ -237,7 +247,7 @@ class ReservationList extends React.Component{
                 </div>
 
                 <Modal show={this.state.showModal} onHide={() => this.handleClose(false)}>
-                    <Modal.Header closeButton>
+                    <Modal.Header>
                         <Modal.Title>Editar Reserva</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>

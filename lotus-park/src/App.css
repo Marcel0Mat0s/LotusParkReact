@@ -37,15 +37,26 @@
   border-radius: 50px;
   padding: 10px;
   margin-top: 50px;
-  width: 300px;
   height: 300px;
 }
 
 .reservas-container{
-  background: linear-gradient(to bottom, #f7f7f7, #e8e8e8);
+  background: linear-gradient(to bottom, #A7A7A7, #F8F8F8);
   border-radius: 50px;
   margin-top: 50px;
   margin-left: 50px;
+  padding: 50px;
+}
+
+.about-container{
+  background: linear-gradient(to bottom, #C7E5AA, #FFFFFF);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50px;
+  padding: 10px;
+  margin-top: 50px;
   padding: 50px;
 }
 
