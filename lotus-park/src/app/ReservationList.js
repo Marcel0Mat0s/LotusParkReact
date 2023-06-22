@@ -136,17 +136,28 @@ class ReservationList extends React.Component{
 
         return (
             <div>
-                <div class="mb-3 row">
-                    <div class="col-md-6 col-xs-12">
-                        <label for="vaga" class="form-label">Insira a vaga:</label>
+                <h4>Inserir Reserva</h4>
+                <div className="row">
+                    <div className="col-md-6 col-xs-12">
+                        <div className="d-flex flex-column">
+                        <label htmlFor="vaga" className="form-label">Insira a vaga:</label>
                         <input type="text" value={this.state.vaga} onChange={(evt) => this.handleChangeVaga(evt)} />
-                        <label for="dateInit" class="form-label">Data de inicio:</label>
+                        </div>
+                        <div className="d-flex flex-column">
+                        <label htmlFor="dateInit" className="form-label">Data de início:</label>
                         <input type="date" value={this.state.dateInit} onChange={(evt) => this.handleChangeDateInit(evt)} />
-                        <label for="dateEnd" class="form-label"> Data de fim:</label>
+                        </div>
+                        <div className="d-flex flex-column">
+                        <label htmlFor="dateEnd" className="form-label">Data de fim:</label>
                         <input type="date" value={this.state.dateEnd} onChange={(evt) => this.handleChangeDateEnd(evt)} />
-                        <button type="submit" class="btn btn-primary" onClick={() => this.handleAddReservation()}>Adicionar</button>
+                        </div>
+                        <div className="d-flex justify-content-start">
+                        <button type="submit" className="btn btn-primary" onClick={() => this.handleAddReservation()}>Adicionar</button>
+                        </div>
                     </div>
                 </div>
+                <br />
+                <h4>Lista de Reservas</h4>
                 <div class="mb-3 row">
                     <div class="col-md-6 col-xs-12">
                         <Accordion defaultActiveKey={['0', '1']} alwaysOpen>
