@@ -7,14 +7,24 @@ import Weather from './app/Weather';
 class App extends React.Component {
   render() {
     return (
-      <div className="custom-page container">
-        <h1>Reservas</h1>
-        <div>
-          <ReservationList />
-        </div>
-        <h1>Widget do Tempo</h1>
-        <div>
-          <Weather />
+      <div className="whole-container">
+        <div className="row">
+          <div className="col-md-6">
+            <div className="reservas-container">
+              <h1 className="text-center">Reservas</h1>
+              <div>
+                <ReservationList />
+              </div>
+            </div>
+          </div>
+          <div className="col-md-6">
+            <div className="widget-container">
+              <h1>Meteorologia</h1>
+              <div>
+                <Weather />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );

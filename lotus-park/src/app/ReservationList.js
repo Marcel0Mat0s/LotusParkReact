@@ -136,30 +136,31 @@ class ReservationList extends React.Component{
 
         return (
             <div>
-                <h4>Inserir Reserva</h4>
+                <h4 className="text-center">Inserir Reserva</h4>
                 <div className="row">
-                    <div className="col-md-6 col-xs-12">
+                    <div className="col-md col-xs-12">
                         <div className="d-flex flex-column">
                         <label htmlFor="vaga" className="form-label">Insira a vaga:</label>
-                        <input type="text" value={this.state.vaga} onChange={(evt) => this.handleChangeVaga(evt)} />
+                        <input type="text" value={this.state.vaga} onChange={(evt) => this.handleChangeVaga(evt)} className="form-control" />
                         </div>
                         <div className="d-flex flex-column">
                         <label htmlFor="dateInit" className="form-label">Data de início:</label>
-                        <input type="date" value={this.state.dateInit} onChange={(evt) => this.handleChangeDateInit(evt)} />
+                        <input type="date" value={this.state.dateInit} onChange={(evt) => this.handleChangeDateInit(evt)} className="form-control"/>
                         </div>
                         <div className="d-flex flex-column">
                         <label htmlFor="dateEnd" className="form-label">Data de fim:</label>
-                        <input type="date" value={this.state.dateEnd} onChange={(evt) => this.handleChangeDateEnd(evt)} />
+                        <input type="date" value={this.state.dateEnd} onChange={(evt) => this.handleChangeDateEnd(evt)} className="form-control"/>
                         </div>
-                        <div className="d-flex justify-content-start">
+                        <br />
+                        <div className="d-flex justify-content-center">
                         <button type="submit" className="btn btn-primary" onClick={() => this.handleAddReservation()}>Adicionar</button>
                         </div>
                     </div>
                 </div>
                 <br />
-                <h4>Lista de Reservas</h4>
+                <h4 className="text-center">Lista de Reservas</h4>
                 <div class="mb-3 row">
-                    <div class="col-md-6 col-xs-12">
+                    <div class="col-md col-xs-12">
                         <Accordion defaultActiveKey={['0', '1']} alwaysOpen>
                             <Accordion.Item eventKey="0">
                                 <Accordion.Header>Reservas Abertas</Accordion.Header>

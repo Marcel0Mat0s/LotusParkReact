@@ -18,10 +18,35 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  align-items: right;
+  justify-content: right;
   font-size: calc(10px + 2vmin);
   color: white;
+}
+
+.whole-container{
+  background-color: #10121e;
+}
+
+.widget-container{
+  background: linear-gradient(to bottom, #B2E7FF, #FFFFFF);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50px;
+  padding: 10px;
+  margin-top: 50px;
+  width: 300px;
+  height: 300px;
+}
+
+.reservas-container{
+  background: linear-gradient(to bottom, #f7f7f7, #e8e8e8);
+  border-radius: 50px;
+  margin-top: 50px;
+  margin-left: 50px;
+  padding: 50px;
 }
 
 .App-link {
